@@ -1,19 +1,20 @@
 package backend.utils;
 
-import java.util.List;
+import backend.models.PromptModel;
+import backend.models.enums.TypeInterview;
 
 public class QuestionGenerator {
-    public static String generateTemplate(List<String> tags) {
-        String formatedTags = String.join(",", tags);
+    public static String generateTemplate(PromptModel model) {
+        String context = (model.getType() == TypeInterview.TECHNICAL)
+                ? "Foque em algoritmos, arquitetura e sintaxe."
+                : "Foque em comportamento, resolução de conflitos e cultura.";
+
         return """
-            Gere 5 perguntas de entrevista baseadas nas tags: [%s].
-            As perguntas devem ser técnicas se as tags envolverem linguagens ou ferramentas.
-            Retorne o resultado estritamente em formato JSON:
-            {
-              "questoes": [
-                { "id": 1, "pergunta": "...", "nivel": "..." }
-              ]
-            }
-            """.formatted(formatedTags);
+            Gere 5 perguntas para uma entrevista de nível %s.
+            Tipo da entrevista: %s.
+            Contexto: %s.
+            Tags específicas: %s.
+            Responda apenas em JSON.
+            """.formatted(model.getLevel(), model.getType(), context, model.getTags());
     }
 }

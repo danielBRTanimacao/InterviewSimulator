@@ -1,6 +1,6 @@
 package backend.controllers.impl;
 
-import backend.controllers.PromptController;
+import backend.controllers.InterviewController;
 import backend.utils.dtos.RequestPromptDTO;
 import backend.models.PromptModel;
 import backend.services.PromptService;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class PromptControllerImpl implements PromptController {
+public class InterviewControllerImpl implements InterviewController {
     @Value("${spring.genai.key}")
     private String apiKey;
 

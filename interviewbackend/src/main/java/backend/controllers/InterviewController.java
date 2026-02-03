@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @RequestMapping("/api")
-public interface PromptController {
+public interface InterviewController {
     @GetMapping
     ResponseEntity<List<PromptModel>> listAllPrompts();
     @PostMapping("/prompt")

@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@RequestMapping("/api")
+@RequestMapping("/api/interviews")
 public interface InterviewController {
     @GetMapping
     ResponseEntity<List<PromptModel>> listAllPrompts();
-    @PostMapping("/prompt")
-    void getSomething();
     @PostMapping
     ResponseEntity<Void> createNewPrompt(@RequestBody RequestPromptDTO data);
 }

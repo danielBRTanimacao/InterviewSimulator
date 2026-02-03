@@ -1,6 +1,7 @@
 package backend.controllers.impl;
 
 import backend.controllers.InterviewController;
+import backend.utils.QuestionGenerator;
 import backend.utils.dtos.RequestPromptDTO;
 import backend.models.PromptModel;
 import backend.services.PromptService;
@@ -28,23 +29,20 @@ public class InterviewControllerImpl implements InterviewController {
     }
 
     @Override
-    public void getSomething() {
+    public ResponseEntity<Void> createNewPrompt(RequestPromptDTO data) {
+        PromptModel prompt = new PromptModel();
+        prompt.setType(data.type());
+        prompt.setLevel(data.level());
+
         Client client = Client.builder().apiKey(apiKey).build();
 
         GenerateContentResponse response =
                 client.models.generateContent(
                         "gemini-3-flash-preview",
-                        "gere uma pergunta técnica de java, sem alternativas",
+                        QuestionGenerator.generateTemplate(prompt),
                         null);
 
         System.out.println(response.text());
-    }
-
-    @Override
-    public ResponseEntity<Void> createNewPrompt(RequestPromptDTO data) {
-        PromptModel prompt = new PromptModel();
-        prompt.setType(data.type());
-        prompt.setLevel(data.level());
 
         service.savePrompt(prompt);
         return new ResponseEntity<>(HttpStatus.CREATED);

@@ -5,7 +5,7 @@ import backend.models.enums.TypeInterview;
 
 public class QuestionGenerator {
     public static String generateTemplate(PromptModel model) {
-        String context = (model.getType() == TypeInterview.TECHNICAL)
+        String contexto = (model.getType() == TypeInterview.TECHNICAL)
                 ? "Foque em algoritmos, arquitetura e sintaxe."
                 : "Foque em comportamento, resolução de conflitos e cultura.";
 
@@ -15,6 +15,6 @@ public class QuestionGenerator {
             Contexto: %s.
             Tags específicas: %s.
             Responda apenas em JSON.
-            """.formatted(model.getLevel(), model.getType(), context, model.getTags());
+            """.formatted(model.getLevel(), model.getType(), contexto, model.getTags());
     }
 }

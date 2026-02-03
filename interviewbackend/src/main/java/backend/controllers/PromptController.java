@@ -1,6 +1,6 @@
 package backend.controllers;
 
-import backend.dtos.RequestPromptDTO;
+import backend.utils.dtos.RequestPromptDTO;
 import backend.models.PromptModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

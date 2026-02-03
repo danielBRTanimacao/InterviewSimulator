@@ -1,7 +1,7 @@
 package backend.controllers.impl;
 
 import backend.controllers.PromptController;
-import backend.dtos.RequestPromptDTO;
+import backend.utils.dtos.RequestPromptDTO;
 import backend.models.PromptModel;
 import backend.services.PromptService;
 import com.google.genai.Client;

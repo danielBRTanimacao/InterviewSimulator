@@ -1,4 +1,4 @@
-package backend.dtos;
+package backend.utils.dtos;
 
 import backend.models.enums.LevelInterview;
 import backend.models.enums.TypeInterview;

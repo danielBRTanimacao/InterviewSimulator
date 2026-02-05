@@ -18,9 +18,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class InterviewControllerImpl implements InterviewController {
-    @Value("${spring.genai.key}")
-    private String apiKey;
-
     private final PromptService service;
 
     @Override
@@ -33,16 +30,6 @@ public class InterviewControllerImpl implements InterviewController {
         PromptModel prompt = new PromptModel();
         prompt.setType(data.type());
         prompt.setLevel(data.level());
-
-        Client client = Client.builder().apiKey(apiKey).build();
-
-        GenerateContentResponse response =
-                client.models.generateContent(
-                        "gemini-3-flash-preview",
-                        QuestionGenerator.generateTemplate(prompt),
-                        null);
-
-        System.out.println(response.text());
 
         service.savePrompt(prompt);
         return new ResponseEntity<>(HttpStatus.CREATED);

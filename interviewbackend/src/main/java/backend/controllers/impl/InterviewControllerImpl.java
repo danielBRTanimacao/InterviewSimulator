@@ -9,17 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 public class InterviewControllerImpl implements InterviewController {
     private final PromptService service;
-
-    @Override
-    public ResponseEntity<List<PromptModel>> listAllPrompts() {
-        return ResponseEntity.ok().body(service.listPrompts());
-    }
 
     @Override
     public ResponseEntity<Void> createNewPrompt(RequestPromptDTO data) {

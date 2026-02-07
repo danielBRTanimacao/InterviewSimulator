@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PromptModel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,14 +1,10 @@
 package backend.controllers.impl;
 
 import backend.controllers.InterviewController;
-import backend.utils.QuestionGenerator;
 import backend.utils.dtos.RequestPromptDTO;
 import backend.models.PromptModel;
 import backend.services.PromptService;
-import com.google.genai.Client;
-import com.google.genai.types.GenerateContentResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

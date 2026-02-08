@@ -1,0 +1,9 @@
+{
+    "properties": [
+        {
+            "name": "spring.genai.key",
+            "type": "java.lang.String",
+            "description": "is a API key from gemini"
+        }
+    ]
+}

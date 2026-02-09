@@ -20,6 +20,24 @@ import { Code2, Users, BrainCircuit } from "lucide-react";
 export default () => {
     const [type, setType] = useState<"TECHNICAL" | "CULTURE">("TECHNICAL");
     const [level, setLevel] = useState("JUNIOR");
+    const [tags, setTags] = useState<string[]>([]);
+
+    const addTag = () => {
+        if (tags.length >= 5) {
+            alert("Máximo de 5 tags atingido!");
+            return;
+        }
+
+        const newTag = prompt("Digite a tecnologia (ex: React, Node):");
+
+        if (newTag && !tags.includes(newTag.trim())) {
+            setTags([...tags, newTag.trim()]);
+        }
+    };
+
+    const removeTag = (tagToRemove: string) => {
+        setTags(tags.filter((tag) => tag !== tagToRemove));
+    };
 
     return (
         <div className="container mx-auto py-10 max-w-4xl">
@@ -96,15 +114,33 @@ export default () => {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">
-                            Tags (Tecnologias)
-                        </label>
-                        <div className="flex flex-wrap gap-2 p-2 border rounded-md min-h-[40px] bg-background">
-                            <Badge variant="secondary">React</Badge>
-                            <Badge variant="secondary">Spring Boot</Badge>
-                            <Badge variant="outline" className="border-dashed">
-                                + Adicionar
-                            </Badge>
+                        <label className="text-sm font-medium">Tags</label>
+                        <div className="flex flex-wrap gap-2 p-2 border rounded-md min-h-[42px] bg-background">
+                            {tags.map((item, id) => (
+                                <Badge
+                                    key={id}
+                                    variant="secondary"
+                                    className="flex items-center gap-1"
+                                >
+                                    {item}
+                                    <button
+                                        onClick={() => removeTag(item)}
+                                        className="ml-1 hover:text-destructive text-xs font-bold"
+                                    >
+                                        ×
+                                    </button>
+                                </Badge>
+                            ))}
+
+                            {tags.length < 5 && (
+                                <Badge
+                                    variant="outline"
+                                    onClick={addTag}
+                                    className="cursor-pointer border-dashed hover:bg-accent"
+                                >
+                                    + Adicionar
+                                </Badge>
+                            )}
                         </div>
                     </div>
                 </div>

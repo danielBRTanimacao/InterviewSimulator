@@ -18,7 +18,9 @@ export default () => {
                     >
                         Login
                     </Button>
-                    <Button className="ml-2">Começar Grátis</Button>
+                    <a href="/interview">
+                        <Button className="ml-2">Começar Grátis</Button>
+                    </a>
                 </div>
             </nav>
 
@@ -37,13 +39,15 @@ export default () => {
                         personalizadas.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
-                        <Button
-                            size="lg"
-                            className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-300/50"
-                        >
-                            Começar Simulação Grátis{" "}
-                            <ArrowRight className="ml-2 h-5 w-5" />
-                        </Button>
+                        <a href="/interview">
+                            <Button
+                                size="lg"
+                                className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-300/50"
+                            >
+                                Começar Simulação Grátis{" "}
+                                <ArrowRight className="ml-2 h-5 w-5" />
+                            </Button>
+                        </a>
                         <Button
                             size="lg"
                             variant="outline"

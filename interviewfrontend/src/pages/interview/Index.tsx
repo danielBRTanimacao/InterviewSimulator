@@ -146,8 +146,8 @@ export default () => {
                 </div>
 
                 <Button className="w-full h-12 text-lg font-semibold bg-primary hover:bg-primary/90">
-                    Gerar Simulado com Gemini{" "}
-                    <BrainCircuit className="ml-2 w-5 h-5" />
+                    Gerar Simulado
+                    <BrainCircuit className="w-5 h-5" />
                 </Button>
             </div>
         </div>

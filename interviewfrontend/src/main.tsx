@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-router";
 
 import App from "./App.tsx";
-import Index from "./assets/pages/interview/Index.tsx";
+import Index from "./pages/interview/Index.tsx";
 
 const rootRoute = createRootRoute();
 

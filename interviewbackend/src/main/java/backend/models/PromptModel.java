@@ -1,10 +1,13 @@
 package backend.models;
 
 import backend.models.enums.LevelInterview;
+import backend.models.enums.TagsInterview;
 import backend.models.enums.TypeInterview;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,5 +22,7 @@ public class PromptModel {
     @Enumerated(EnumType.STRING)
     private LevelInterview level;
 
-    private String tags;
+    @ElementCollection(targetClass = TagsInterview.class)
+    @Enumerated(EnumType.STRING)
+    private List<TagsInterview> tags;
 }

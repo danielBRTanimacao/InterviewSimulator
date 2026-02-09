@@ -1,7 +1,8 @@
 package backend.models.enums;
 
 public enum LevelInterview {
+    TRAINEE,
     JUNIOR,
-    PLENO,
+    MIDLEVEL,
     SENIOR
 }

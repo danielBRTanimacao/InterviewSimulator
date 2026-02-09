@@ -15,7 +15,7 @@ public class InterviewControllerImpl implements InterviewController {
     private final PromptService service;
 
     @Override
-    public ResponseEntity<Void> createNewPrompt(RequestPromptDTO data) {
+    public ResponseEntity<Void> generateNewPrompt(RequestPromptDTO data) {
         PromptModel prompt = new PromptModel();
         prompt.setType(data.type());
         prompt.setLevel(data.level());

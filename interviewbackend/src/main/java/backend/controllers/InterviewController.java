@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/interviews")
 public interface InterviewController {
     @PostMapping
-    ResponseEntity<Void> createNewPrompt(@RequestBody RequestPromptDTO data);
+    ResponseEntity<Void> generateNewPrompt(@RequestBody RequestPromptDTO data);
 }

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class QuestionGenerator {
+
     @Value("${api.genai.key}")
     private String apiKey;
     

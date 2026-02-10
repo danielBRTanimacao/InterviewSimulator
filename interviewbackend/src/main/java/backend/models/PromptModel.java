@@ -17,6 +17,8 @@ public class PromptModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // private UserModel id;
+
     @Enumerated(EnumType.STRING)
     private TypeInterview type;
     @Enumerated(EnumType.STRING)

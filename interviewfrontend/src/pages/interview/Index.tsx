@@ -15,24 +15,36 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Code2, Users, BrainCircuit } from "lucide-react";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@/components/ui/command";
+import { Code2, Users, BrainCircuit, X, Plus } from "lucide-react";
+
+import TagsList from "../../assets/json/tags.json";
 
 export default () => {
     const [type, setType] = useState<"TECHNICAL" | "CULTURE">("TECHNICAL");
     const [level, setLevel] = useState("JUNIOR");
     const [tags, setTags] = useState<string[]>([]);
+    const [open, setOpen] = useState(false);
 
-    const addTag = () => {
-        if (tags.length >= 5) {
-            alert("Máximo de 5 tags atingido!");
-            return;
+    const handleSelectTag = (tag: string) => {
+        if (tags.length < 5 && !tags.includes(tag)) {
+            setTags([...tags, tag]);
         }
-
-        const newTag = prompt("Digite a tecnologia (ex: React, Node):");
-
-        if (newTag && !tags.includes(newTag.trim())) {
-            setTags([...tags, newTag.trim()]);
-        }
+        setOpen(false);
     };
 
     const removeTag = (tagToRemove: string) => {
@@ -115,37 +127,70 @@ export default () => {
 
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Tags</label>
-                        <div className="flex flex-wrap gap-2 p-2 border rounded-md min-h-[42px] bg-background">
-                            {tags.map((item, id) => (
+                        <div className="flex flex-wrap gap-2 p-2 border rounded-md min-h-[42px] bg-background items-center">
+                            {tags.map((item) => (
                                 <Badge
-                                    key={id}
+                                    key={item}
                                     variant="secondary"
                                     className="flex items-center gap-1"
                                 >
                                     {item}
-                                    <button
+                                    <X
                                         onClick={() => removeTag(item)}
-                                        className="ml-1 hover:text-destructive text-xs font-bold"
-                                    >
-                                        ×
-                                    </button>
+                                        className="w-3 h-3 cursor-pointer hover:text-destructive"
+                                    />
                                 </Badge>
                             ))}
 
-                            {tags.length < 5 && (
-                                <Badge
-                                    variant="outline"
-                                    onClick={addTag}
-                                    className="cursor-pointer border-dashed hover:bg-accent"
-                                >
-                                    + Adicionar
-                                </Badge>
-                            )}
+                            <Dialog open={open} onOpenChange={setOpen}>
+                                <DialogTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="h-7 border-dashed gap-1"
+                                        disabled={tags.length >= 5}
+                                    >
+                                        <Plus className="w-3 h-3" />
+                                        Adicionar
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent className="p-0 overflow-hidden">
+                                    <DialogHeader className="p-4 pb-0">
+                                        <DialogTitle>
+                                            Buscar Tecnologia
+                                        </DialogTitle>
+                                    </DialogHeader>
+                                    <Command>
+                                        <CommandInput placeholder="Ex: React, Java, Docker..." />
+                                        <CommandList className="max-h-[300px]">
+                                            <CommandEmpty>
+                                                Nenhuma tecnologia encontrada.
+                                            </CommandEmpty>
+                                            <CommandGroup heading="Disponíveis">
+                                                {TagsList.filter(
+                                                    (t) => !tags.includes(t),
+                                                ).map((tag) => (
+                                                    <CommandItem
+                                                        key={tag}
+                                                        value={tag}
+                                                        onSelect={() =>
+                                                            handleSelectTag(tag)
+                                                        }
+                                                        className="cursor-pointer"
+                                                    >
+                                                        {tag}
+                                                    </CommandItem>
+                                                ))}
+                                            </CommandGroup>
+                                        </CommandList>
+                                    </Command>
+                                </DialogContent>
+                            </Dialog>
                         </div>
                     </div>
                 </div>
 
-                <Button className="w-full h-12 text-lg font-semibold bg-primary hover:bg-primary/90">
+                <Button className="w-full h-12 text-lg font-semibold bg-primary hover:bg-primary/90 gap-2">
                     Gerar Simulado
                     <BrainCircuit className="w-5 h-5" />
                 </Button>

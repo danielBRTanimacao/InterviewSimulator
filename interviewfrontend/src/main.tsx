@@ -9,6 +9,7 @@ import {
 
 import App from "./App.tsx";
 import Index from "./pages/interview/Index.tsx";
+import AuthControll from "./pages/auth/AuthControll.tsx";
 
 const rootRoute = createRootRoute();
 
@@ -22,6 +23,11 @@ const routes = [
         getParentRoute: () => rootRoute,
         path: "/interview",
         component: Index,
+    }),
+    createRoute({
+        getParentRoute: () => rootRoute,
+        path: "/auth",
+        component: AuthControll,
     }),
 ];
 

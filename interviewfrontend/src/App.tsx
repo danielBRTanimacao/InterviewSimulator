@@ -1,7 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Brain, Lightbulb, MessageSquare } from "lucide-react";
+import { useRef } from "react";
 
 export default () => {
+    const elementRef = useRef<HTMLHeadingElement | null>(null);
+    const handleScroll = () => {
+        elementRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
     return (
         <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 text-gray-900">
             <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -49,6 +55,7 @@ export default () => {
                             </Button>
                         </a>
                         <Button
+                            onClick={handleScroll}
                             size="lg"
                             variant="outline"
                             className="border-gray-300 text-gray-700 hover:bg-gray-100"
@@ -62,7 +69,10 @@ export default () => {
 
             <section className="py-20 bg-white border-t border-b border-gray-100">
                 <div className="container mx-auto px-4 text-center">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-12 text-gray-800">
+                    <h2
+                        className="text-3xl md:text-4xl font-bold mb-12 text-gray-800"
+                        ref={elementRef}
+                    >
                         Como o InterviewPro Funciona?
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">

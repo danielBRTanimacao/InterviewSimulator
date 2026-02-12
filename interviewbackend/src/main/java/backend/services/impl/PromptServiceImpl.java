@@ -10,13 +10,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PromptServiceImpl implements PromptService {
 
-    //private final PromptRepository repository;
     private final QuestionGenerator generator;
 
     @Override
     public void savePrompt(PromptModel data) {
         generator.contentImplement(data);
 
-        //repository.save(data);
     }
 }

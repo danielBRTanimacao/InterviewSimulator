@@ -40,14 +40,26 @@ export default () => {
     const [tags, setTags] = useState<string[]>([]);
     const [open, setOpen] = useState(false);
 
+    const sanitizeTag = (tag: string) => {
+        return tag
+            .toLowerCase()
+            .trim()
+            .normalize("NFD")
+            .replace(/[\u0300_\u036f]/g, "")
+            .replace(/[^\w\s-]/g, "");
+    };
+
     const handleSelectTag = (tag: string) => {
-        if (tags.length < 5 && !tags.includes(tag)) {
-            setTags([...tags, tag]);
+        const cleanTag = sanitizeTag(tag);
+        if (tags.length < 5 && !tags.includes(cleanTag)) {
+            setTags([...tags, cleanTag]);
         }
         setOpen(false);
     };
 
-    const removeTag = (tagToRemove: string) => {
+    const removeTag = (e: React.MouseEvent, tagToRemove: string) => {
+        e.preventDefault();
+        e.stopPropagation();
         setTags(tags.filter((tag) => tag !== tagToRemove));
     };
 
@@ -135,10 +147,13 @@ export default () => {
                                     className="flex items-center gap-1"
                                 >
                                     {item}
-                                    <X
-                                        onClick={() => removeTag(item)}
-                                        className="w-3 h-3 cursor-pointer hover:text-destructive"
-                                    />
+                                    <button
+                                        type="button"
+                                        onClick={(e) => removeTag(e, item)}
+                                        className="hover:bg-muted rounded-full p-0.5"
+                                    >
+                                        <X className="w-3 h-3 cursor-pointer hover:text-destructive" />
+                                    </button>
                                 </Badge>
                             ))}
 
@@ -168,7 +183,10 @@ export default () => {
                                             </CommandEmpty>
                                             <CommandGroup heading="Disponíveis">
                                                 {TagsList.filter(
-                                                    (t) => !tags.includes(t),
+                                                    (t) =>
+                                                        !tags.includes(
+                                                            sanitizeTag(t),
+                                                        ),
                                                 ).map((tag) => (
                                                     <CommandItem
                                                         key={tag}

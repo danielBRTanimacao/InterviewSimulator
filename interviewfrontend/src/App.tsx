@@ -18,12 +18,14 @@ export default () => {
                     </span>
                 </div>
                 <div>
-                    <Button
-                        variant="ghost"
-                        className="text-gray-700 hover:text-blue-600"
-                    >
-                        Login
-                    </Button>
+                    <a href="/auth">
+                        <Button
+                            variant="ghost"
+                            className="text-gray-700 hover:text-blue-600"
+                        >
+                            Login
+                        </Button>
+                    </a>
                     <a href="/interview">
                         <Button className="ml-2">Começar Grátis</Button>
                     </a>

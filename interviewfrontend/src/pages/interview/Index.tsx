@@ -15,13 +15,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
     Command,
     CommandEmpty,
@@ -37,6 +31,8 @@ import {
     X,
     Plus,
     ChevronRight,
+    Timer,
+    Play,
 } from "lucide-react";
 
 import TagsList from "../../assets/json/tags.json";
@@ -44,14 +40,19 @@ import TagsList from "../../assets/json/tags.json";
 export default () => {
     const [type, setType] = useState<"TECHNICAL" | "CULTURE">("TECHNICAL");
     const [level, setLevel] = useState("JUNIOR");
+    const [timeLimit, setTimeLimit] = useState("120");
     const [tags, setTags] = useState<string[]>([]);
     const [open, setOpen] = useState(false);
 
     const [isStarted, setIsStarted] = useState(false);
+    const [hasBegan, setHasBegan] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(120);
+
     const videoRef = useRef<HTMLVideoElement>(null);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const chunksRef = useRef<Blob[]>([]);
+    const timerRef = useRef<any>(null);
 
     const questions = [
         "Fale um pouco sobre você e sua trajetória profissional.",
@@ -85,6 +86,10 @@ export default () => {
 
     const startSimulated = async () => {
         setIsStarted(true);
+        setTimeLeft(parseInt(timeLimit));
+    };
+
+    const beginRecording = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: true,
@@ -111,14 +116,13 @@ export default () => {
                 a.href = url;
                 a.download = `entrevista-${Date.now()}.webm`;
                 a.click();
-
                 stream.getTracks().forEach((track) => track.stop());
             };
 
             recorder.start();
+            setHasBegan(true);
         } catch (err) {
-            console.error("Erro ao acessar câmera:", err);
-            alert("Não foi possível acessar a câmera.");
+            alert("Erro ao acessar câmera e áudio.");
             setIsStarted(false);
         }
     };
@@ -126,12 +130,42 @@ export default () => {
     const nextQuestion = () => {
         if (currentQuestion < questions.length - 1) {
             setCurrentQuestion((prev) => prev + 1);
+            setTimeLeft(parseInt(timeLimit));
         } else {
-            mediaRecorderRef.current?.stop();
-            setIsStarted(false);
-            setCurrentQuestion(0);
-            alert("Simulado finalizado! O vídeo será baixado.");
+            finishSimulation();
         }
+    };
+
+    const finishSimulation = () => {
+        mediaRecorderRef.current?.stop();
+        if (timerRef.current) clearInterval(timerRef.current);
+        setIsStarted(false);
+        setHasBegan(false);
+        setCurrentQuestion(0);
+        alert("Simulado finalizado! O vídeo será baixado.");
+    };
+
+    useEffect(() => {
+        if (hasBegan) {
+            timerRef.current = setInterval(() => {
+                setTimeLeft((prev) => {
+                    if (prev <= 1) {
+                        nextQuestion();
+                        return parseInt(timeLimit);
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        }
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+        };
+    }, [hasBegan, currentQuestion, timeLimit]);
+
+    const formatTime = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, "0")}`;
     };
 
     if (isStarted) {
@@ -145,42 +179,100 @@ export default () => {
                         className="w-full h-full object-cover scale-x-[-1]"
                     />
 
-                    <div className="absolute top-6 left-6 z-20">
-                        <Badge
-                            variant="destructive"
-                            className="animate-pulse gap-2 px-3 py-1.5 text-sm uppercase font-bold"
-                        >
-                            <div className="w-2.5 h-2.5 bg-white rounded-full" />{" "}
-                            Gravando
-                        </Badge>
-                    </div>
+                    {!hasBegan ? (
+                        <div className="absolute inset-0 bg-black/80 backdrop-blur-md z-30 flex items-center justify-center text-center p-6">
+                            <div className="max-w-md space-y-6 text-white">
+                                <div className="space-y-2">
+                                    <h2 className="text-3xl font-bold">
+                                        Tudo pronto?
+                                    </h2>
+                                    <p className="text-gray-400">
+                                        Você responderá{" "}
+                                        <strong>
+                                            {questions.length} perguntas
+                                        </strong>{" "}
+                                        com um tempo limite de{" "}
+                                        <strong>
+                                            {formatTime(parseInt(timeLimit))}
+                                        </strong>{" "}
+                                        para cada uma.
+                                    </p>
+                                </div>
 
-                    <div className="absolute top-0 left-0 right-0 p-8 bg-gradient-to-b from-black/80 via-black/40 to-transparent pt-12">
-                        <div className="max-w-3xl mx-auto text-center">
-                            <span className="text-primary font-mono text-sm tracking-widest uppercase mb-2 block">
-                                Pergunta {currentQuestion + 1} de{" "}
-                                {questions.length}
-                            </span>
-                            <h2 className="text-white text-2xl md:text-3xl font-bold leading-tight drop-shadow-md">
-                                "{questions[currentQuestion]}"
-                            </h2>
-                        </div>
-                    </div>
+                                <div className="bg-white/10 p-4 rounded-xl text-sm text-left space-y-2 border border-white/10">
+                                    <p>• Ligue sua câmera e microfone.</p>
+                                    <p>
+                                        • Clique em começar para a primeira
+                                        pergunta.
+                                    </p>
+                                    <p>
+                                        • Clique em continuar para a próxima
+                                        questão.
+                                    </p>
+                                    <p>
+                                        • Se o tempo acabar, o sistema pula
+                                        automaticamente.
+                                    </p>
+                                </div>
 
-                    <div className="absolute bottom-0 left-0 right-0 p-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
-                        <div className="max-w-xs mx-auto">
-                            <Button
-                                onClick={nextQuestion}
-                                size="lg"
-                                className="w-full h-14 text-lg font-bold rounded-full gap-2 shadow-2xl transition-transform active:scale-95"
-                            >
-                                {currentQuestion === questions.length - 1
-                                    ? "Finalizar e Salvar"
-                                    : "Próxima Pergunta"}
-                                <ChevronRight className="w-6 h-6" />
-                            </Button>
+                                <Button
+                                    size="lg"
+                                    onClick={beginRecording}
+                                    className="w-full h-14 text-xl gap-2 font-bold"
+                                >
+                                    <Play className="fill-current" /> Começar
+                                    Agora
+                                </Button>
+                            </div>
                         </div>
-                    </div>
+                    ) : (
+                        <>
+                            <div className="absolute top-6 left-6 z-20 flex gap-3">
+                                <Badge
+                                    variant="destructive"
+                                    className="animate-pulse gap-2 px-3 py-1.5 text-sm uppercase font-bold"
+                                >
+                                    <div className="w-2.5 h-2.5 bg-white rounded-full" />{" "}
+                                    Gravando
+                                </Badge>
+                                <Badge
+                                    variant="secondary"
+                                    className="gap-2 px-3 py-1.5 font-mono text-sm bg-black/50 text-white backdrop-blur-md border-none"
+                                >
+                                    <Timer className="w-4 h-4 text-primary" />{" "}
+                                    {formatTime(timeLeft)}
+                                </Badge>
+                            </div>
+
+                            <div className="absolute top-0 left-0 right-0 p-8 bg-gradient-to-b from-black/80 via-black/40 to-transparent pt-12">
+                                <div className="max-w-3xl mx-auto text-center">
+                                    <span className="text-primary font-mono text-sm tracking-widest uppercase mb-2 block">
+                                        Pergunta {currentQuestion + 1} de{" "}
+                                        {questions.length}
+                                    </span>
+                                    <h2 className="text-white text-2xl md:text-3xl font-bold leading-tight drop-shadow-md">
+                                        "{questions[currentQuestion]}"
+                                    </h2>
+                                </div>
+                            </div>
+
+                            <div className="absolute bottom-0 left-0 right-0 p-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                                <div className="max-w-xs mx-auto">
+                                    <Button
+                                        onClick={nextQuestion}
+                                        size="lg"
+                                        className="w-full h-14 text-lg font-bold rounded-full gap-2 shadow-2xl transition-transform active:scale-95"
+                                    >
+                                        {currentQuestion ===
+                                        questions.length - 1
+                                            ? "Finalizar e Salvar"
+                                            : "Continuar"}
+                                        <ChevronRight className="w-6 h-6" />
+                                    </Button>
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         );
@@ -193,8 +285,8 @@ export default () => {
                     Prepare-se para o Próximo Nível
                 </h1>
                 <p className="text-muted-foreground mt-2">
-                    Sua entrevista será gravada localmente para sua análise
-                    pessoal.
+                    Simule entrevistas reais com gravação local e controle de
+                    tempo.
                 </p>
             </div>
 
@@ -241,14 +333,12 @@ export default () => {
             </div>
 
             <div className="mt-8 space-y-6">
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-3">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">
-                            Nível da Experiência
-                        </label>
+                        <label className="text-sm font-medium">Nível</label>
                         <Select onValueChange={setLevel} defaultValue={level}>
                             <SelectTrigger className="bg-background">
-                                <SelectValue placeholder="Selecione o nível" />
+                                <SelectValue placeholder="Nível" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="BEGINNER">
@@ -257,6 +347,25 @@ export default () => {
                                 <SelectItem value="JUNIOR">Junior</SelectItem>
                                 <SelectItem value="PLENO">Pleno</SelectItem>
                                 <SelectItem value="SENIOR">Senior</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">
+                            Tempo por questão
+                        </label>
+                        <Select
+                            onValueChange={setTimeLimit}
+                            defaultValue={timeLimit}
+                        >
+                            <SelectTrigger className="bg-background">
+                                <SelectValue placeholder="Tempo" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="60">1 Minuto</SelectItem>
+                                <SelectItem value="120">2 Minutos</SelectItem>
+                                <SelectItem value="180">3 Minutos</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -276,13 +385,12 @@ export default () => {
                                     <button
                                         type="button"
                                         onClick={(e) => removeTag(e, item)}
-                                        className="hover:bg-muted rounded-full p-0.5"
+                                        className="hover:text-destructive"
                                     >
-                                        <X className="w-3 h-3 text-muted-foreground hover:text-destructive" />
+                                        <X className="w-3 h-3" />
                                     </button>
                                 </Badge>
                             ))}
-
                             <Dialog open={open} onOpenChange={setOpen}>
                                 <DialogTrigger asChild>
                                     <Button
@@ -291,23 +399,17 @@ export default () => {
                                         className="h-7 border-dashed gap-1"
                                         disabled={tags.length >= 5}
                                     >
-                                        <Plus className="w-3 h-3" />
-                                        Adicionar
+                                        <Plus className="w-3 h-3" /> Adicionar
                                     </Button>
                                 </DialogTrigger>
                                 <DialogContent className="p-0 overflow-hidden">
-                                    <DialogHeader className="p-4 pb-0">
-                                        <DialogTitle>
-                                            Buscar Tecnologia
-                                        </DialogTitle>
-                                    </DialogHeader>
                                     <Command>
-                                        <CommandInput placeholder="Ex: React, Java, Docker..." />
-                                        <CommandList className="max-h-[300px]">
+                                        <CommandInput placeholder="Buscar tecnologia..." />
+                                        <CommandList>
                                             <CommandEmpty>
-                                                Nenhuma tecnologia encontrada.
+                                                Não encontrado.
                                             </CommandEmpty>
-                                            <CommandGroup heading="Disponíveis">
+                                            <CommandGroup>
                                                 {TagsList.filter(
                                                     (t) =>
                                                         !tags.includes(

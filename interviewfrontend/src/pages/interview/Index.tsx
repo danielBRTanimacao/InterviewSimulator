@@ -441,7 +441,7 @@ export default () => {
                                                 <Plus className="w-4 h-4" /> Add
                                             </Button>
                                         </DialogTrigger>
-                                        <DialogContent className="p-0 overflow-hidden rounded-3xl border-none">
+                                        <DialogContent className="p-0 overflow-hidden rounded-xl border-none">
                                             <Command className="rounded-none">
                                                 <CommandInput
                                                     placeholder="Search technology..."
@@ -484,7 +484,7 @@ export default () => {
 
                         <Button
                             onClick={startSimulated}
-                            className="w-full h-20 text-2xl font-black rounded-[1.5rem] bg-primary hover:bg-primary/90 shadow-2xl shadow-primary/30 gap-4 transition-all active:scale-[0.98]"
+                            className="w-full h-20 text-xl font-black rounded-[1.5rem] bg-primary hover:bg-primary/90 shadow-2xl shadow-primary/30 gap-4 transition-all active:scale-[0.98]"
                         >
                             Gerar Simulado Personalizado
                             <BrainCircuit className="w-8 h-8" />

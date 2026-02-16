@@ -292,10 +292,10 @@ export default () => {
                     <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-bold tracking-wide uppercase">
                         <BrainCircuit className="w-4 h-4" /> AI Simulation
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-zinc-900 dark:text-white">
+                    <h1 className="text-2xl md:text-6xl font-black tracking-tighter text-zinc-900 dark:text-white">
                         Prepare seu <span className="text-primary">Pitch</span>
                     </h1>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto font-medium">
+                    <p className="text-zinc-500 dark:text-zinc-400 text-lg md:text-xl max-w-xl mx-auto font-medium">
                         Pratique em um ambiente seguro e analise sua performance
                         técnica e comportamental.
                     </p>
@@ -336,7 +336,7 @@ export default () => {
                             >
                                 <item.icon className="w-7 h-7" />
                             </div>
-                            <h3 className="text-2xl font-bold mb-2 dark:text-white">
+                            <h3 className="text-xl font-bold mb-2 dark:text-white">
                                 {item.title}
                             </h3>
                             <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">

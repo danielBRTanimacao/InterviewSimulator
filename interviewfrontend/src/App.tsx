@@ -26,7 +26,7 @@ export default () => {
                             Login
                         </Button>
                     </a>
-                    <a href="/interview">
+                    <a href="/interview" className="hidden sm:inline">
                         <Button className="ml-2">Começar Grátis</Button>
                     </a>
                 </div>

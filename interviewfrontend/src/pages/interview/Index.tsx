@@ -484,10 +484,14 @@ export default () => {
 
                         <Button
                             onClick={startSimulated}
-                            className="w-full h-20 text-xl font-black rounded-[1.5rem] bg-primary hover:bg-primary/90 shadow-2xl shadow-primary/30 gap-4 transition-all active:scale-[0.98]"
+                            className="
+                            whitespace-normal
+                            w-full h-20 text-lg font-black rounded-[1.5rem] bg-primary 
+                            hover:bg-primary/90 shadow-2xl shadow-primary/30 gap-4 transition-all active:scale-[0.98]
+                            "
                         >
                             Gerar Simulado Personalizado
-                            <BrainCircuit className="w-8 h-8" />
+                            <BrainCircuit className="w-8 h-8 hidden sm:inline" />
                         </Button>
                     </CardContent>
                 </Card>

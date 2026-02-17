@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Github, Chrome } from "lucide-react";
+import { Chrome } from "lucide-react";
 
 export default () => {
   const [loginUsername, setLoginUsername] = useState("");
